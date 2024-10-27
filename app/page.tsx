@@ -1,101 +1,82 @@
+"use client";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isOpen, setIsOpen] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  return (
+    <>
+      <main>
+        <div className="home">
+          {/* Navbar */}
+          <nav className="navbar select-none flex justify-between w-full items-center h-[90px] px-8 absolute top-0">
+            <p className="text-3xl">OJ</p>
+            <div className="flex items-center space-x-4">
+              <p className="hidden text-2xl md:block">menu</p>
+              <button onClick={() => setIsOpen(!isOpen)} className="text-2xl">&#9776;</button>
+            </div>
+          </nav>
+
+          {/* Mobile View */}
+          <div
+            className={`fixed top-0 right-0 h-full w-full md:w-2/3 bg-white transition-transform duration-500 transform ease-[cubic-bezier(.58,-0.18,.97,.87)] ${
+              isOpen ? 'translate-x-0' : 'translate-x-full'
+            } z-50 flex justify-center items-center`}
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <div className="mobile-view-main grid gap-4 md:grid-cols-2 md:justify-start md:items-start p-4">
+              {/* Close Button */}
+              <button onClick={() => setIsOpen(false)} className="text-3xl self-start">&#10006;</button>
+
+              {/* Social Section */}
+              <div className="flex flex-col">
+                <p className="text-gray-600 text-base md:text-lg mb-2 tracking-wide">Social</p>
+                <p className="text-xl md:text-2xl py-4">Github</p>
+                <p className="text-xl md:text-2xl py-4">Linkedin</p>
+                <p className="text-xl md:text-2xl py-4">X</p>
+              </div>
+
+              {/* Menu Section */}
+              <div className="flex flex-col">
+                <p className="text-gray-600 text-base md:text-lg mb-2 tracking-wide">Menu</p>
+                <p className="text-3xl md:text-4xl py-4">About Me</p>
+                <p className="text-3xl md:text-4xl py-4">Projects</p>
+                <p className="text-3xl md:text-4xl py-4">Contact</p>
+              </div>
+
+              {/* Get in Touch Section */}
+              <div className="flex flex-col">
+                <p className="text-gray-600 text-base md:text-lg mb-2 tracking-wide">Get in touch</p>
+                <p className="md:text-2xl">jadhavoj2023@gmail.com</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="main-content-home flex justify-center items-center h-screen w-full flex-col">
+            <h1 className="md:text-[70px] max-sm:text-[9vw] sm:text-[9vw] max-sm:max-w-sm max-sm:leading-tight text-light khula-extrabold w-[732px] text-center leading-[85px] text-shadow">
+              Where every line of <span className="add-grad">code</span> tells a story.
+            </h1>
+
+            <p className="small-hero text-lg mt-4 max-w-[390px] text-gray-2 max-sm:text-[4vw] px-4 text-center leading-[123%]">Software engineer turning ideas into impactful, innovative solutions.</p>
+            <Image src="/scroll.png" alt="IMAGE HERE" width={100} height={100} className="scroller" style={{ filter: 'invert(1)'}} />
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+      <style jsx>{`
+        .small-hero
+        {
+          color:#888888;
+        }
+        .text-shadow {
+          text-shadow: rgba(255, 255, 255, 0.25) 0px 0px 6px;
+          transform: translateY(0px);
+          opacity: 1;
+        }
+      `}</style>
+    </>
   );
 }
