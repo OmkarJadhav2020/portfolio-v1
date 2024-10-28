@@ -12,6 +12,7 @@ body
   margin: 0;
   /* background-color: rgba(0,0,0,1); */
   /* scroll-snap-type: y mandatory; */
+
 }
 
 .home
@@ -43,6 +44,10 @@ body
   overflow: hidden;
   background-color: white;
 
+}
+main
+{
+  scroll-behavior: smooth;
 }
 .mobile-view-main
 {
@@ -117,3 +122,4 @@ body
 {
   transform: translate(2px,5px)
 }
+
