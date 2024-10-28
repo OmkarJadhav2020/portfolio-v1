@@ -297,7 +297,7 @@ export default function Home() {
               transition:"all 1s ease"
             }}
           >
-            <button onClick={closeModal} className="absolute top-5 right-2 text-4xl self-end mb-4 text-white"><IoCloseOutline /></button>
+            <button onClick={closeModal} className="fixed top-5 right-2 text-4xl self-end mb-4 text-white"><IoCloseOutline /></button>
             {modalData.image && (
               <Image
                 src={modalData.image}
