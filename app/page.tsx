@@ -10,7 +10,7 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [txtColor, setTxtColor] = useState("white");
   const [bgColor, setBgColor] = useState("rgba(0, 0, 0, 1)"); // Default background color
-  const mainRef = useRef(null);
+  const mainRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,11 +31,11 @@ export default function Home() {
     };
 
     const mainElement = mainRef.current;
-    mainElement.addEventListener("scroll", handleScroll);
+    mainElement?.addEventListener("scroll", handleScroll);
 
     // Cleanup on component unmount
     return () => {
-      mainElement.removeEventListener("scroll", handleScroll);
+      mainElement?.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -174,7 +174,7 @@ export default function Home() {
             {/* Left Div */}
             <div className="flex flex-col items-center md:items-start space-y-4 gap-y-2 md:gap-y-4">
               <h2 className=" text-2xl md:text-3xl lg:text-4xl">
-                Hi, I'm Omkar.
+                Hi, I&apos;m Omkar.
               </h2>
               <Link
                 href={"#contacts"}
@@ -213,7 +213,7 @@ export default function Home() {
         >
           <div className="flex flex-col items-center ">
             <h3 className="text-xl md:text-2xl text-stone-600 font-semibold appear">Want to collaborate ?</h3>
-            <h1 className="text-5xl md:text-7xl font-semibold appear">Let's have a chat!</h1>
+            <h1 className="text-5xl md:text-7xl font-semibold appear">Let&apos;s have a chat!</h1>
             <div className="mt-20 flex gap-x-5">
               <Link href={"#"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><MdOutlineEmail /> Email</Link>
               <Link href={"#"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><IoCallOutline /> Phone</Link>
