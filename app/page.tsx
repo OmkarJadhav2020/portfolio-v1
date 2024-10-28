@@ -213,7 +213,7 @@ export default function Home() {
         >
           <div className="flex flex-col items-center ">
             <h3 className="text-xl md:text-2xl text-stone-600 font-semibold appear">Want to collaborate ?</h3>
-            <h1 className="text-5xl md:text-7xl font-semibold appear">Let&apos;s have a chat!</h1>
+            <h1 className="text-4xl md:text-7xl font-semibold appear">Let&apos;s have a chat!</h1>
             <div className="mt-20 flex gap-x-5">
               <Link href={"#"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><MdOutlineEmail /> Email</Link>
               <Link href={"#"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><IoCallOutline /> Phone</Link>
