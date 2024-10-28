@@ -215,9 +215,9 @@ export default function Home() {
             <h3 className="text-xl md:text-2xl text-stone-600 font-semibold appear">Want to collaborate ?</h3>
             <h1 className="text-4xl md:text-7xl font-semibold appear">Let&apos;s have a chat!</h1>
             <div className="mt-20 flex gap-x-5">
-              <Link href={"#"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><MdOutlineEmail /> Email</Link>
-              <Link href={"#"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><IoCallOutline /> Phone</Link>
-              <Link href={"# "} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><FiLinkedin /> Linkedin</Link>
+              <Link href={"mailto:jadhavoj2023@gmail.com"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><MdOutlineEmail /> Email</Link>
+              <Link href={"tel:+917767827080"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><IoCallOutline /> Phone</Link>
+              <Link href={"https://www.linkedin.com/in/omkar-jadhav-036360204/"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><FiLinkedin /> Linkedin</Link>
             </div>
             <p className="mt-10 text-2xl font-semibold">OJ</p>
             <p className="text-3xl font-thin ">Omkar Jadhav</p>
@@ -239,7 +239,7 @@ export default function Home() {
           opacity: 1;
         }
         .scroll-snap-container {
-          scroll-snap-type: y mandatory; /* Set the snap type for the container */
+          scroll-snap-type: y proximity; /* Set the snap type for the container */
           height: 100vh; /* Ensure full viewport height */
           overflow-y: auto; /* Enable vertical scrolling */
         }
