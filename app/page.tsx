@@ -1,16 +1,74 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, SetStateAction } from "react";
 import { MdOutlineEmail } from "react-icons/md";
 import { IoCallOutline } from "react-icons/io5";
 import { FiLinkedin } from "react-icons/fi";
+import { IoCloseOutline } from "react-icons/io5";
+
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [txtColor, setTxtColor] = useState("white");
   const [bgColor, setBgColor] = useState("rgba(0, 0, 0, 1)"); // Default background color
   const mainRef = useRef<HTMLElement | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({
+    image: "",
+    title: "",
+    description: "",
+    link: "",
+    github: "", // Added GitHub link
+  });
+
+  const projectData = [
+    {
+      id: 1,
+      title: "Smart AI Notes",
+      description: "ML / Web Development",
+      link: "https://smart-ai-notes.vercel.app/",
+      github: "https://github.com/OmkarJadhav2020/smart-ai-notes", // Example GitHub link
+      image: "/image1.png",
+    },
+    {
+      id: 2,
+      title: "OLang",
+      description: "Compiler Design",
+      link: "", // No live project link
+      github: "", // Example GitHub link
+      image: "/image2.png",
+    },
+    {
+      id: 3,
+      title: "Collab Work",
+      description: "Concurrency / Web Development",
+      link: "", // No live project link
+      github: "", // Example GitHub link
+      image: "/image3.png",
+    },
+    {
+      id: 4,
+      title: "MeetUp",
+      description: "Peer to Peer / Web Development",
+      link: "", // Example live project link
+      github: "", // Example GitHub link
+      image: "/image4.png",
+    },
+  ];
+
+  const openModal = (project) => {
+    setModalData({
+      image: project.image,
+      title: project.title,
+      description: project.description,
+      link: project.link || "",
+      github: project.github || "", // Set GitHub link
+    });
+    setShowModal(true);
+  };
+
+  const closeModal = () => setShowModal(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -202,31 +260,65 @@ export default function Home() {
           id="projects"
           className="about-me h-screen w-screen scroll-snap-section flex flex-col items-center justify-center"
         >
-          <h1 className="text-center text-4xl mt-10">Projects</h1>
-          {/* borderBottom:"1px solid #6B7280" */}
-          <div className="all-projects w-7/12 flex flex-col m-10" style={{}}>
-            <div className="cards relative flex w-full justify-between items-center p-10" style={{}}>
-              <div className="flex gap-2 items-start"><p className="text-xl text-gray-500">01</p>
-              <h1 className="text-6xl">Smart AI Notes</h1></div>
-              <p className="text-lg text-gray-500">ML / Web Development</p>
-            </div>
-            <div className="cards relative flex w-full justify-between items-center p-10" style={{}}>
-              <div className="flex gap-2 items-start"><p className="text-xl text-gray-500">02</p>
-              <h1 className="text-6xl">OLang</h1></div>
-              <p className="text-lg text-gray-500">Compiler Design</p>
-            </div>
-            <div className="cards relative flex w-full justify-between items-center p-10" style={{}}>
-              <div className="flex gap-2 items-start"><p className="text-xl text-gray-500">03</p>
-              <h1 className="text-6xl">Collab Work</h1></div>
-              <p className="text-lg text-gray-500">Concurrency / Web Development</p>
-            </div>
-            <div className="cards relative flex w-full justify-between items-center p-10" style={{}}>
-              <div className="flex gap-2 items-start"><p className="text-xl text-gray-500">04</p>
-              <h1 className="text-6xl">MeetUp</h1></div>
-              <p className="text-lg text-gray-500">Peer to Peer / Web Development</p>
-            </div>
+          <h1 className="appear text-center text-4xl mt-10">Projects</h1>
+          <div className="all-projects w-full xl:w-7/12 flex flex-col m-10">
+            {projectData.map((project) => (
+              <div
+                key={project.id}
+                onClick={() => openModal(project)}
+                className="cards relative flex md:flex-row flex-col w-full justify-between items-center p-10 cursor-pointer"
+              >
+                <div className="flex gap-1 items-start">
+                  <p className="text-sm md:text-xl text-gray-500">{`0${project.id}`}</p>
+                  <h1 className="text-2xl sm:text-4xl md:text-6xl">
+                    {project.title}
+                  </h1>
+                </div>
+                <p className="text-base md:text-lg text-gray-500">
+                  {project.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
+
+        {/* Modal */}
+        {showModal && (
+          <div
+            className={`absolute bottom-0 left-0 w-full h-[100vh] bg-black z-[100] text-white shadow-lg p-6 flex flex-col items-center justify-center`} style={{
+              transition:"all 1s ease"
+            }}
+          >
+            <button onClick={closeModal} className="text-4xl self-end mb-4 text-white"><IoCloseOutline /></button>
+            {modalData.image && (
+              <Image
+                src={modalData.image}
+                alt={modalData.title}
+                width={400}
+                height={200}
+                // className=""
+              />
+            )}
+            <h2 className="text-2xl font-bold mt-4" style={{color:"#a45f5f"}}>{modalData.title}</h2>
+            <p className="mt-2 text-gray-600">{modalData.description}</p>
+            {modalData.link && (
+              <Link
+                href={modalData.link}
+                target="_blank"
+                className="text-blue-600 mt-4 hover:underline"
+              >
+                View Project
+              </Link>
+            )}
+            {modalData.github && (
+                <p className="mt-2">
+                  <Link href={modalData.github} target="_blank" className="text-blue-600 hover:underline">
+                    GitHub Repository
+                  </Link>
+                </p>
+              )}
+          </div>
+        )}
         <div
           id="contacts"
           className="about-me h-screen w-screen scroll-snap-section grid items-center justify-center relative"
@@ -235,19 +327,48 @@ export default function Home() {
           }}
         >
           <div className="flex flex-col items-center ">
-            <h3 className="text-xl md:text-2xl text-stone-600 font-semibold appear">Want to collaborate ?</h3>
-            <h1 className="text-4xl md:text-7xl font-semibold appear">Let&apos;s have a chat!</h1>
+            <h3 className="text-xl md:text-2xl text-stone-600 font-semibold appear">
+              Want to collaborate ?
+            </h3>
+            <h1 className="text-4xl md:text-7xl font-semibold appear">
+              Let&apos;s have a chat!
+            </h1>
             <div className="mt-20 flex gap-x-5">
-              <Link href={"mailto:jadhavoj2023@gmail.com"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><MdOutlineEmail /> Email</Link>
-              <Link href={"tel:+917767827080"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><IoCallOutline /> Phone</Link>
-              <Link href={"https://www.linkedin.com/in/omkar-jadhav-036360204/"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{border:"1px solid black",borderRadius : "15px"}}><FiLinkedin /> Linkedin</Link>
+              <Link
+                href={"mailto:jadhavoj2023@gmail.com"}
+                className="px-2 py-1 flex gap-1 items-center anim-btn"
+                style={{ border: "1px solid black", borderRadius: "15px" }}
+              >
+                <MdOutlineEmail /> Email
+              </Link>
+              <Link
+                href={"tel:+917767827080"}
+                className="px-2 py-1 flex gap-1 items-center anim-btn"
+                style={{ border: "1px solid black", borderRadius: "15px" }}
+              >
+                <IoCallOutline /> Phone
+              </Link>
+              <Link
+                href={"https://www.linkedin.com/in/omkar-jadhav-036360204/"}
+                className="px-2 py-1 flex gap-1 items-center anim-btn"
+                style={{ border: "1px solid black", borderRadius: "15px" }}
+              >
+                <FiLinkedin /> Linkedin
+              </Link>
             </div>
             <p className="mt-10 text-2xl font-semibold">OJ</p>
             <p className="text-3xl font-thin ">Omkar Jadhav</p>
-            <p className="mb-10 text-sm sm:text-base font-thin text-gray-3 select-none text-center" style={{
-              position:"absolute",
-              bottom : "0",
-            }}>&copy; Omkar Jadhav 2024 . All rights reserved . Location India. <br />  This site showcases a selection of my personal and professional projects.</p>
+            <p
+              className="mb-10 text-sm sm:text-base font-thin text-gray-3 select-none text-center"
+              style={{
+                position: "absolute",
+                bottom: "0",
+              }}
+            >
+              &copy; Omkar Jadhav 2024 . All rights reserved . Location India.{" "}
+              <br /> This site showcases a selection of my personal and
+              professional projects.
+            </p>
           </div>
         </div>
       </main>
