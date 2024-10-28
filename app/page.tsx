@@ -200,9 +200,32 @@ export default function Home() {
 
         <div
           id="projects"
-          className="about-me h-screen w-screen scroll-snap-section"
+          className="about-me h-screen w-screen scroll-snap-section flex flex-col items-center justify-center"
         >
-          Projects
+          <h1 className="text-center text-4xl mt-10">Projects</h1>
+          {/* borderBottom:"1px solid #6B7280" */}
+          <div className="all-projects w-7/12 flex flex-col m-10" style={{}}>
+            <div className="cards relative flex w-full justify-between items-center p-10" style={{}}>
+              <div className="flex gap-2 items-start"><p className="text-xl text-gray-500">01</p>
+              <h1 className="text-6xl">Smart AI Notes</h1></div>
+              <p className="text-lg text-gray-500">ML / Web Development</p>
+            </div>
+            <div className="cards relative flex w-full justify-between items-center p-10" style={{}}>
+              <div className="flex gap-2 items-start"><p className="text-xl text-gray-500">02</p>
+              <h1 className="text-6xl">OLang</h1></div>
+              <p className="text-lg text-gray-500">Compiler Design</p>
+            </div>
+            <div className="cards relative flex w-full justify-between items-center p-10" style={{}}>
+              <div className="flex gap-2 items-start"><p className="text-xl text-gray-500">03</p>
+              <h1 className="text-6xl">Collab Work</h1></div>
+              <p className="text-lg text-gray-500">Concurrency / Web Development</p>
+            </div>
+            <div className="cards relative flex w-full justify-between items-center p-10" style={{}}>
+              <div className="flex gap-2 items-start"><p className="text-xl text-gray-500">04</p>
+              <h1 className="text-6xl">MeetUp</h1></div>
+              <p className="text-lg text-gray-500">Peer to Peer / Web Development</p>
+            </div>
+          </div>
         </div>
         <div
           id="contacts"
@@ -239,7 +262,7 @@ export default function Home() {
           opacity: 1;
         }
         .scroll-snap-container {
-          scroll-snap-type: y proximity; /* Set the snap type for the container */
+          scroll-snap-type: y mandatory; /* Set the snap type for the container */
           height: 100vh; /* Ensure full viewport height */
           overflow-y: auto; /* Enable vertical scrolling */
         }
