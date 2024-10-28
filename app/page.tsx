@@ -1,11 +1,19 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useRef, SetStateAction } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MdOutlineEmail } from "react-icons/md";
 import { IoCallOutline } from "react-icons/io5";
 import { FiLinkedin } from "react-icons/fi";
 import { IoCloseOutline } from "react-icons/io5";
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  link: string;
+  github: string;
+  image: string;
+}
 
 
 export default function Home() {
@@ -57,7 +65,7 @@ export default function Home() {
     },
   ];
 
-  const openModal = (project) => {
+  const openModal = (project:Project) => {
     setModalData({
       image: project.image,
       title: project.title,
@@ -289,7 +297,7 @@ export default function Home() {
               transition:"all 1s ease"
             }}
           >
-            <button onClick={closeModal} className="text-4xl self-end mb-4 text-white"><IoCloseOutline /></button>
+            <button onClick={closeModal} className="absolute top-5 right-2 text-4xl self-end mb-4 text-white"><IoCloseOutline /></button>
             {modalData.image && (
               <Image
                 src={modalData.image}
