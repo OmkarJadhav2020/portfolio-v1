@@ -6,73 +6,163 @@ import { MdOutlineEmail } from "react-icons/md";
 import { IoCallOutline } from "react-icons/io5";
 import { FiLinkedin } from "react-icons/fi";
 import { IoCloseOutline } from "react-icons/io5";
+import { FaChevronDown, FaTrophy, FaLightbulb, FaCheckCircle } from "react-icons/fa"; // Import for accordion and achievements
+import { GoGitBranch, GoLinkExternal } from "react-icons/go"; // Import for project links
+import { BsYoutube } from "react-icons/bs";
+
 interface Project {
   id: number;
   title: string;
   description: string;
+  detailedDescription: string[];
+  techStack: string[];
   link: string;
   github: string;
+  videoLink: string;
   image: string;
+}
+
+interface ExperienceItem {
+  company: string;
+  role: string;
+  duration: string;
+  location: string;
+  description: string[];
+  technologies: string[];
+}
+
+interface AchievementItem {
+    icon: React.ElementType;
+    title: string;
+    description: string;
 }
 
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [txtColor, setTxtColor] = useState("white");
-  const [bgColor, setBgColor] = useState("rgba(0, 0, 0, 1)"); // Default background color
+  const [bgColor, setBgColor] = useState("rgba(0, 0, 0, 1)");
   const mainRef = useRef<HTMLElement | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState({
-    image: "",
-    title: "",
-    description: "",
-    link: "",
-    github: "", // Added GitHub link
-  });
+  
+  // Update modalData state to hold all new project fields
+  const [modalData, setModalData] = useState<Project | null>(null);
 
-  const projectData = [
+  const [activeCompanyIndex, setActiveCompanyIndex] = useState(0);
+
+  // NEW: Data for the achievements section
+  const achievementsData: AchievementItem[] = [
+    {
+      icon: FaTrophy,
+      title: "Smart India Hackathon 2024 Champion",
+      description: "Secured 1st place and a ₹1,00,000 prize at NIT Surathkal for an Al-driven automation solution.",
+    },
+    {
+      icon: FaLightbulb,
+      title: "IDE Bootcamp Top 1% Innovator",
+      description: "Secured a ₹5,00,000 prize at the Innovation, Design, and Entrepreneurship Bootcamp.",
+    },
+    {
+      icon: FaCheckCircle,
+      title: "GATE Qualified",
+      description: "Qualified the prestigious national-level Graduate Aptitude Test in Engineering (GATE).",
+    },
+  ];
+
+  // ENHANCED: Project data with details from your resume
+  const projectData: Project[] = [
     {
       id: 1,
-      title: "Smart AI Notes",
-      description: "ML / Web Development",
-      link: "https://smart-ai-notes.vercel.app/",
-      github: "https://github.com/OmkarJadhav2020/smart-ai-notes", // Example GitHub link
+      title: "Geo-Orchestrator",
+      description: 'LLM Geospatial Automation.',
+      detailedDescription: [
+        "Engineered a reasoning engine using a fine-tuned Mistral-7B model and a RAG pipeline to translate natural language queries into executable Python (GeoPandas) GIS workflows. ",
+        "Achieved 95% workflow generation accuracy on expert-defined tasks, automating complex, domain-specific analysis.",
+      ],
+      techStack: ["LLM", "Mistral-7B", "RAG", "Python", "GeoPandas"],
+      link: "",
+      github: "",
+      videoLink: "",
       image: "/image1.png",
     },
     {
       id: 2,
-      title: "OLang",
-      description: "Compiler Design",
-      link: "", // No live project link
-      github: "", // Example GitHub link
-      image: "/image2.png",
-    },
-    {
-      id: 3,
-      title: "Collab Work",
-      description: "Concurrency / Web Development",
-      link: "", // No live project link
-      github: "", // Example GitHub link
+      title: "Safai-Saathi",
+      description: "AI-Powered Waste Economy Platform",
+      detailedDescription: [
+        "Built and deployed an IoT smart station using a Raspberry Pi and on-device TensorFlow Lite for 95% accurate waste classification and transparent NFC payments.",
+        "Developed a scalable cloud backend (Node.js, PostgreSQL) providing verifiable ESG traceability data for B2B partners.",
+      ],
+      techStack: ["IoT", "TensorFlow Lite", "Raspberry Pi", "Node.js", "PostgreSQL"],
+      link: "",
+      github: "",
+      videoLink: "https://www.youtube.com/watch?v=A7LjH6ZH9bc&feature=youtu.be",
       image: "/image3.png",
     },
     {
+      id: 3,
+      title: "Enterprise RAG",
+      description: "Document Intelligence Platform",
+      detailedDescription: [
+          "Developed a serverless, scalable platform using Azure and RAG to automatically extract, classify, and summarize insights from unstructured business documents.",
+      ],
+      techStack: ["Azure", "RAG", "Serverless", "Document AI"],
+      link: "",
+      github: "",
+      videoLink: "",
+      image: "/image2.png",
+    },
+    {
       id: 4,
-      title: "MeetUp",
-      description: "Peer to Peer / Web Development",
-      link: "", // Example live project link
-      github: "", // Example GitHub link
+      title: "Smart AI Notes",
+      description: "ML / Web Development",
+      detailedDescription: [
+        "Built a real-time collaborative note-taking application with Al-powered features using Next.js, providing an intuitive interface for seamless content creation.",
+      ],
+      techStack: ["Next.js", "Real-time Collaboration", "AI/ML", "Vercel"],
+      link: "https://smart-ai-notes.vercel.app/",
+      github: "https://github.com/OmkarJadhav2020/smart-ai-notes",
+      videoLink: "",
       image: "/image4.png",
     },
   ];
 
-  const openModal = (project:Project) => {
-    setModalData({
-      image: project.image,
-      title: project.title,
-      description: project.description,
-      link: project.link || "",
-      github: project.github || "", // Set GitHub link
-    });
+  const experienceData: ExperienceItem[] = [
+    {
+      company: "Parametric Technology Corporation (PTC)",
+      role: "Software Engineer Intern",
+      duration: "July 2025 – Present",
+      location: "Pune, India",
+      description: [
+        "Developing and integrating backend **product features** for Windchill, a flagship Product Lifecycle Management (PLM) platform, using Java and Spring Boot. ",
+        "Applied critical thinking and systems design principles to architect a new search-indexing microservice, targeting a 30% query latency reduction for large-scale enterprise datasets. ",
+      ],
+      technologies: ["Java", "Spring Boot", "Microservices", "PLM"],
+    },
+    {
+      company: "Accenture",
+      role: "Associate Software Engineer Intern",
+      duration: "May 2025 – July 2025 ",
+      location: "Pune, India ",
+      description: [
+        "Engineered and deployed enterprise-grade Generative AI solutions, delivering key **product features** using RAG pipelines to improve data retrieval accuracy and reduce manual analysis time by 40%. ",
+      ],
+      technologies: ["Generative AI", "RAG Pipelines", "Data Retrieval", "Python"],
+    },
+    {
+      company: "ChicChic",
+      role: "Backend Engineer, R&D (Part-time)",
+      duration: "June 2025 – August 2025 ",
+      location: "Pune, India ",
+      description: [
+        "Built scalable backend systems using Node.js and Python to support new **product features**, optimizing API performance by 45% and supporting a 50% increase in user traffic.",
+      ],
+      technologies: ["Node.js", "Python", "API Development", "Scalability"],
+    },
+  ];
+
+  const openModal = (project: Project) => {
+    setModalData(project);
     setShowModal(true);
   };
 
@@ -81,17 +171,15 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       if (mainRef.current) {
-        const homeSectionHeight = window.innerHeight; // Height of home section
-        const scrollPosition = mainRef.current.scrollTop; // Current scroll position
-        // console.log("Scroll Position:", scrollPosition);
+        const homeSectionHeight = window.innerHeight;
+        const scrollPosition = mainRef.current.scrollTop;
 
-        // Change background color based on scroll position
         if (scrollPosition > homeSectionHeight / 2) {
           setBgColor("white");
-          setTxtColor("black"); // Background color when not in home section
+          setTxtColor("black");
         } else {
           setBgColor("rgba(0, 0, 0, 1)");
-          setTxtColor("white"); // Original home background color
+          setTxtColor("white");
         }
       }
     };
@@ -99,7 +187,6 @@ export default function Home() {
     const mainElement = mainRef.current;
     mainElement?.addEventListener("scroll", handleScroll);
 
-    // Cleanup on component unmount
     return () => {
       mainElement?.removeEventListener("scroll", handleScroll);
     };
@@ -178,6 +265,17 @@ export default function Home() {
                     About Me
                   </Link>
                 </p>
+                {/* NEW: Achievements Link */}
+                <p className="text-3xl md:text-4xl py-4 tran transition-transform hover:translate-x-3 ">
+                  <Link onClick={() => setIsOpen(false)} href={"#achievements"}>
+                    Achievements
+                  </Link>
+                </p>
+                <p className="text-3xl md:text-4xl py-4 tran transition-transform hover:translate-x-3 ">
+                  <Link onClick={() => setIsOpen(false)} href={"#experience"}>
+                    Experience
+                  </Link>
+                </p>
                 <p className="text-3xl md:text-4xl py-4 tran transition-transform hover:translate-x-3 ">
                   <Link onClick={() => setIsOpen(false)} href={"#projects"}>
                     Projects
@@ -196,7 +294,7 @@ export default function Home() {
                   Get in touch
                 </p>
                 <p className="md:text-2xl hover:underline">
-                  jadhavoj2023@gmail.com
+                  jadhavoj2025@gmail.com
                 </p>
               </div>
             </div>
@@ -208,14 +306,13 @@ export default function Home() {
               Where every line of <span className="add-grad">code</span> tells a
               story.
             </h1>
-
             <p className="small-hero text-lg mt-4 max-w-[390px] text-gray-2 max-sm:text-[4vw] px-4 text-center leading-[123%]">
               Software engineer turning ideas into impactful, innovative
               solutions.
             </p>
             <Image
               src="/scroll.png"
-              alt="IMAGE HERE"
+              alt="Scroll down icon"
               width={100}
               height={100}
               className="scroller"
@@ -226,18 +323,14 @@ export default function Home() {
 
         <div
           id="about-me"
-          className="about-me h-screen w-screen scroll-snap-section flex flex-col items-center justify-center text-left space-y-8 px-8 md:gap-y-28"
+          className="about-me min-h-screen w-screen scroll-snap-section flex flex-col items-center justify-center text-left space-y-8 px-8 md:gap-y-28 bg-white text-black"
         >
-          {/* First Row: h1 */}
           <h1 className="appear text-[1.2rem] font-bold tracking-wide md:text-3xl lg:text-5xl max-w-5xl ">
             I believe in crafting software that’s as reliable as it is
             innovative, driven by a commitment to quality, collaboration, and
             continuous improvement.
           </h1>
-
-          {/* Second Row: Content Div */}
           <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-5xl space-y-8 md:space-y-0 md:space-x-8">
-            {/* Left Div */}
             <div className="flex flex-col items-center md:items-start space-y-4 gap-y-2 md:gap-y-4">
               <h2 className=" text-2xl md:text-3xl lg:text-4xl">
                 Hi, I&apos;m Omkar.
@@ -249,8 +342,6 @@ export default function Home() {
                 Get in Touch
               </Link>
             </div>
-
-            {/* Right Div */}
             <div className=" text-base md:text-xl lg:text-2xl max-w-md lg:max-w-xl text-gray-600">
               <p>
                 I am a 21-year-old software engineer with a passion for creating
@@ -263,10 +354,92 @@ export default function Home() {
             </div>
           </div>
         </div>
+        
+        {/* NEW: Achievements Section */}
+        <div id="achievements" className="min-h-screen w-screen scroll-snap-section flex flex-col items-center justify-center py-16 px-8 bg-white text-black">
+            <h1 className="text-4xl md:text-6xl font-bold mb-12 appear text-center">
+                Achievements
+            </h1>
+            <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-8">
+                {achievementsData.map((achievement, index) => (
+                    <div key={index} className="flex flex-col items-center text-center p-6 bg-gray-50 rounded-lg">
+                        <achievement.icon className="text-5xl mb-4 text-gray-700" />
+                        <h3 className="text-xl font-bold text-black mb-2">{achievement.title}</h3>
+                        <p className="text-base text-gray-600">{achievement.description}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
 
+        {/* Experience Section */}
+        <div
+          id="experience"
+          className="min-h-screen w-screen scroll-snap-section flex flex-col items-center justify-center py-16 px-8 bg-white text-black"
+        >
+          <h1 className="text-4xl md:text-6xl font-bold mb-12 appear">
+            Experience
+          </h1>
+          <div className="w-full max-w-5xl flex flex-col md:flex-row md:space-x-8">
+            {/* Desktop Tabs */}
+            <div className="hidden md:flex flex-col md:w-1/3">
+              {experienceData.map((exp, index) => (
+                <button
+                  key={`desktop-tab-${index}`}
+                  onClick={() => setActiveCompanyIndex(index)}
+                  className={`relative text-left py-3 px-4 text-xl font-semibold transition-colors duration-200 ease-in-out ${ activeCompanyIndex === index ? "text-black bg-gray-50" : "text-gray-500 hover:text-black hover:bg-gray-100" }`}
+                >
+                  {activeCompanyIndex === index && ( <span className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-br from-blue-400 to-purple-600"></span> )}
+                  <span className="ml-2">{exp.company}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Desktop Details Panel */}
+            <div className="hidden md:block md:w-2/3 md:pl-8 pt-4">
+              {experienceData[activeCompanyIndex] && (
+                <div key={`desktop-details-${activeCompanyIndex}`} className="animate-fadeIn" >
+                  <h2 className="text-2xl md:text-3xl font-bold mb-2"> {experienceData[activeCompanyIndex].role} @{" "} {experienceData[activeCompanyIndex].company} </h2>
+                  <p className="text-gray-600 text-base md:text-lg mb-4"> {experienceData[activeCompanyIndex].duration} &mdash;{" "} {experienceData[activeCompanyIndex].location} </p>
+                  <ul className="list-disc list-inside text-gray-800 text-base md:text-lg mb-6 space-y-2">
+                    {experienceData[activeCompanyIndex].description.map( (point, i) => ( <li key={i} dangerouslySetInnerHTML={{ __html: point }} /> ) )}
+                  </ul>
+                  <div className="flex flex-wrap gap-2">
+                    {experienceData[activeCompanyIndex].technologies.map( (tech, i) => ( <span key={i} className="px-3 py-1 text-sm bg-gray-200 text-gray-800 rounded-full anim-btn" style={{ border: "1px solid #ccc" }} > {tech} </span> ) )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Accordion */}
+            <div className="md:hidden w-full">
+              {experienceData.map((exp, index) => (
+                <div key={`mobile-accordion-${index}`} className="mb-4 last:mb-0 border-b border-gray-200">
+                  <button className="flex justify-between items-center w-full py-4 text-xl font-semibold text-left" onClick={() => setActiveCompanyIndex( activeCompanyIndex === index ? -1 : index )} aria-expanded={activeCompanyIndex === index} aria-controls={`exp-details-${index}`} >
+                    <span>{exp.company}</span>
+                    <FaChevronDown className={`transform transition-transform duration-300 ${ activeCompanyIndex === index ? "rotate-180" : "" }`} />
+                  </button>
+                  <div id={`exp-details-${index}`} className={`overflow-hidden transition-all duration-500 ease-in-out ${ activeCompanyIndex === index ? "max-h-screen opacity-100 py-4" : "max-h-0 opacity-0" }`} >
+                    <div className="pl-4">
+                      <h2 className="text-xl font-bold mb-1"> {exp.role} @ {exp.company} </h2>
+                      <p className="text-gray-600 text-sm mb-3"> {exp.duration} &mdash; {exp.location} </p>
+                      <ul className="list-disc list-inside text-gray-800 text-base mb-4 space-y-1">
+                        {exp.description.map((point, i) => ( <li key={i} dangerouslySetInnerHTML={{ __html: point }} /> ))}
+                      </ul>
+                      <div className="flex flex-wrap gap-2">
+                        {exp.technologies.map((tech, i) => ( <span key={i} className="px-3 py-1 text-xs bg-gray-200 text-gray-800 rounded-full anim-btn" style={{ border: "1px solid #ccc" }} > {tech} </span> ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Projects Section */}
         <div
           id="projects"
-          className="about-me h-screen w-screen scroll-snap-section flex flex-col items-center justify-center"
+          className="min-h-screen w-screen scroll-snap-section flex flex-col items-center justify-center bg-white text-black"
         >
           <h1 className="appear text-center text-4xl mt-10">Projects</h1>
           <div className="all-projects w-full xl:w-7/12 flex flex-col m-10">
@@ -290,43 +463,58 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Modal */}
-        {showModal && (
-          <div
-            className={`absolute bottom-0 left-0 w-full h-[100vh] bg-black z-[100] text-white shadow-lg p-6 flex flex-col items-center justify-center`} style={{
-              transition:"all 1s ease"
-            }}
-          >
-            <button onClick={closeModal} className="fixed top-5 right-2 text-4xl self-end mb-4 text-white"><IoCloseOutline /></button>
-            {modalData.image && (
-              <Image
-                src={modalData.image}
-                alt={modalData.title}
-                width={400}
-                height={200}
-                // className=""
-              />
-            )}
-            <h2 className="text-2xl font-bold mt-4" style={{color:"#a45f5f"}}>{modalData.title}</h2>
-            <p className="mt-2 text-gray-600">{modalData.description}</p>
-            {modalData.link && (
-              <Link
-                href={modalData.link}
-                target="_blank"
-                className="text-blue-600 mt-4 hover:underline"
-              >
-                View Project
-              </Link>
-            )}
-            {modalData.github && (
-                <p className="mt-2">
-                  <Link href={modalData.github} target="_blank" className="text-blue-600 hover:underline">
-                    GitHub Repository
-                  </Link>
-                </p>
-              )}
-          </div>
+        {/* UPGRADED: Project Modal */}
+        {showModal && modalData && (
+          <div className="fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 animate-fadeIn" onClick={closeModal}>
+            <div className="bg-white text-black rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto relative p-8" onClick={(e) => e.stopPropagation()}>
+                <button onClick={closeModal} className="absolute top-4 right-4 text-3xl text-gray-500 hover:text-black transition-colors">
+                    <IoCloseOutline />
+                </button>
+                
+                <h2 className="text-4xl font-bold mb-4">{modalData.title}</h2>
+                
+                <div className="mb-6">
+                    <h3 className="text-xl font-semibold mb-2 text-gray-800">About the Project</h3>
+                    <ul className="list-disc list-inside text-gray-700 space-y-2">
+                        {modalData.detailedDescription.map((point, i) => (
+                          <li key={i} dangerouslySetInnerHTML={{ __html: point }} />
+                        ))}
+                    </ul>
+                </div>
+                
+                <div className="mb-6">
+                    <h3 className="text-xl font-semibold mb-3 text-gray-800">Technologies Used</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {modalData.techStack.map((tech, i) => (
+                            <span key={i} className="px-3 py-1 text-sm bg-gray-200 text-gray-800 rounded-full" style={{ border: "1px solid #ccc" }}>
+                                {tech}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex flex-wrap gap-4 pt-4 border-t border-gray-200">
+                    {modalData.link && (
+                        <a href={modalData.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-lg text-white bg-black px-4 py-2 rounded-full hover:bg-gray-800 transition-colors">
+                            <GoLinkExternal /> Live Demo
+                        </a>
+                    )}
+                    {modalData.videoLink && (
+                        <a href={modalData.videoLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-lg text-white bg-red-600 px-4 py-2 rounded-full hover:bg-red-700 transition-colors">
+                            <BsYoutube /> Video Demo
+                        </a>
+                    )}
+                    {modalData.github && (
+                        <a href={modalData.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-lg text-gray-700 bg-gray-200 px-4 py-2 rounded-full hover:bg-gray-300 transition-colors">
+                            <GoGitBranch /> GitHub
+                        </a>
+                    )}
+                </div>
+            </div>
+        </div>
         )}
+        
+        {/* Contact Section */}
         <div
           id="contacts"
           className="about-me h-screen w-screen scroll-snap-section grid items-center justify-center relative"
@@ -342,25 +530,13 @@ export default function Home() {
               Let&apos;s have a chat!
             </h1>
             <div className="mt-20 flex gap-x-5">
-              <Link
-                href={"mailto:jadhavoj2023@gmail.com"}
-                className="px-2 py-1 flex gap-1 items-center anim-btn"
-                style={{ border: "1px solid black", borderRadius: "15px" }}
-              >
+              <Link href={"mailto:jadhavoj2025@gmail.com"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{ border: "1px solid black", borderRadius: "15px" }} >
                 <MdOutlineEmail /> Email
               </Link>
-              <Link
-                href={"tel:+917767827080"}
-                className="px-2 py-1 flex gap-1 items-center anim-btn"
-                style={{ border: "1px solid black", borderRadius: "15px" }}
-              >
+              <Link href={"tel:+917767827080"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{ border: "1px solid black", borderRadius: "15px" }} >
                 <IoCallOutline /> Phone
               </Link>
-              <Link
-                href={"https://www.linkedin.com/in/omkar-jadhav-036360204/"}
-                className="px-2 py-1 flex gap-1 items-center anim-btn"
-                style={{ border: "1px solid black", borderRadius: "15px" }}
-              >
+              <Link href={"https://www.linkedin.com/in/omkar-jadhav-036360204/"} className="px-2 py-1 flex gap-1 items-center anim-btn" style={{ border: "1px solid black", borderRadius: "15px" }} >
                 <FiLinkedin /> Linkedin
               </Link>
             </div>
@@ -368,10 +544,7 @@ export default function Home() {
             <p className="text-3xl font-thin ">Omkar Jadhav</p>
             <p
               className="mb-10 text-sm sm:text-base font-thin text-gray-3 select-none text-center"
-              style={{
-                position: "absolute",
-                bottom: "0",
-              }}
+              style={{ position: "absolute", bottom: "0" }}
             >
               &copy; Omkar Jadhav 2024 . All rights reserved . Location India.{" "}
               <br /> This site showcases a selection of my personal and
@@ -391,12 +564,34 @@ export default function Home() {
           opacity: 1;
         }
         .scroll-snap-container {
-          scroll-snap-type: y mandatory; /* Set the snap type for the container */
-          height: 100vh; /* Ensure full viewport height */
-          overflow-y: auto; /* Enable vertical scrolling */
+          scroll-snap-type: y mandatory;
+          height: 100vh;
+          overflow-y: auto;
         }
         .scroll-snap-section {
-          scroll-snap-align: start; /* Align for snapping */
+          scroll-snap-align: start;
+        }
+        .add-grad {
+          background: linear-gradient(
+            to right,
+            #8a2be2,
+            #4169e1
+          ); /* Indigo to Royal Blue */
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
     </>
