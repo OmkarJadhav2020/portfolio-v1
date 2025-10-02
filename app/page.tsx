@@ -10,7 +10,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { GoGitBranch, GoLinkExternal } from "react-icons/go";
 import { BsYoutube } from "react-icons/bs";
 
-import { Project, ExperienceItem, AchievementItem } from "@/data/interfaces";
+import { Project } from "@/data/interfaces";
 import { achievementsData, projectData, experienceData } from "@/data/content"; 
 
 export default function Home() {
