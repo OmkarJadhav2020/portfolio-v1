@@ -6,37 +6,12 @@ import { MdOutlineEmail } from "react-icons/md";
 import { IoCallOutline } from "react-icons/io5";
 import { FiLinkedin } from "react-icons/fi";
 import { IoCloseOutline } from "react-icons/io5";
-import { FaChevronDown, FaTrophy, FaLightbulb, FaCheckCircle } from "react-icons/fa"; // Import for accordion and achievements
-import { GoGitBranch, GoLinkExternal } from "react-icons/go"; // Import for project links
+import { FaChevronDown } from "react-icons/fa";
+import { GoGitBranch, GoLinkExternal } from "react-icons/go";
 import { BsYoutube } from "react-icons/bs";
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  detailedDescription: string[];
-  techStack: string[];
-  link: string;
-  github: string;
-  videoLink: string;
-  image: string;
-}
-
-interface ExperienceItem {
-  company: string;
-  role: string;
-  duration: string;
-  location: string;
-  description: string[];
-  technologies: string[];
-}
-
-interface AchievementItem {
-    icon: React.ElementType;
-    title: string;
-    description: string;
-}
-
+import { Project, ExperienceItem, AchievementItem } from "@/data/interfaces";
+import { achievementsData, projectData, experienceData } from "@/data/content"; 
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,122 +19,10 @@ export default function Home() {
   const [bgColor, setBgColor] = useState("rgba(0, 0, 0, 1)");
   const mainRef = useRef<HTMLElement | null>(null);
   const [showModal, setShowModal] = useState(false);
-  
-  // Update modalData state to hold all new project fields
+
   const [modalData, setModalData] = useState<Project | null>(null);
 
   const [activeCompanyIndex, setActiveCompanyIndex] = useState(0);
-
-  // NEW: Data for the achievements section
-  const achievementsData: AchievementItem[] = [
-    {
-      icon: FaTrophy,
-      title: "Smart India Hackathon 2024 Champion",
-      description: "Secured 1st place and a ₹1,00,000 prize at NIT Surathkal for an Al-driven automation solution.",
-    },
-    {
-      icon: FaLightbulb,
-      title: "IDE Bootcamp Top 1% Innovator",
-      description: "Secured a ₹5,00,000 prize at the Innovation, Design, and Entrepreneurship Bootcamp.",
-    },
-    {
-      icon: FaCheckCircle,
-      title: "GATE Qualified",
-      description: "Qualified the prestigious national-level Graduate Aptitude Test in Engineering (GATE).",
-    },
-  ];
-
-  // ENHANCED: Project data with details from your resume
-  const projectData: Project[] = [
-    {
-      id: 1,
-      title: "Geo-Orchestrator",
-      description: 'LLM Geospatial Automation.',
-      detailedDescription: [
-        "Engineered a reasoning engine using a fine-tuned Mistral-7B model and a RAG pipeline to translate natural language queries into executable Python (GeoPandas) GIS workflows. ",
-        "Achieved 95% workflow generation accuracy on expert-defined tasks, automating complex, domain-specific analysis.",
-      ],
-      techStack: ["LLM", "Mistral-7B", "RAG", "Python", "GeoPandas"],
-      link: "",
-      github: "",
-      videoLink: "",
-      image: "/image1.png",
-    },
-    {
-      id: 2,
-      title: "Safai-Saathi",
-      description: "AI-Powered Waste Economy Platform",
-      detailedDescription: [
-        "Built and deployed an IoT smart station using a Raspberry Pi and on-device TensorFlow Lite for 95% accurate waste classification and transparent NFC payments.",
-        "Developed a scalable cloud backend (Node.js, PostgreSQL) providing verifiable ESG traceability data for B2B partners.",
-      ],
-      techStack: ["IoT", "TensorFlow Lite", "Raspberry Pi", "Node.js", "PostgreSQL"],
-      link: "",
-      github: "",
-      videoLink: "https://www.youtube.com/watch?v=A7LjH6ZH9bc&feature=youtu.be",
-      image: "/image3.png",
-    },
-    {
-      id: 3,
-      title: "Enterprise RAG",
-      description: "Document Intelligence Platform",
-      detailedDescription: [
-          "Developed a serverless, scalable platform using Azure and RAG to automatically extract, classify, and summarize insights from unstructured business documents.",
-      ],
-      techStack: ["Azure", "RAG", "Serverless", "Document AI"],
-      link: "",
-      github: "",
-      videoLink: "",
-      image: "/image2.png",
-    },
-    {
-      id: 4,
-      title: "Smart AI Notes",
-      description: "ML / Web Development",
-      detailedDescription: [
-        "Built a real-time collaborative note-taking application with Al-powered features using Next.js, providing an intuitive interface for seamless content creation.",
-      ],
-      techStack: ["Next.js", "Real-time Collaboration", "AI/ML", "Vercel"],
-      link: "https://smart-ai-notes.vercel.app/",
-      github: "https://github.com/OmkarJadhav2020/smart-ai-notes",
-      videoLink: "",
-      image: "/image4.png",
-    },
-  ];
-
-  const experienceData: ExperienceItem[] = [
-    {
-      company: "Parametric Technology Corporation (PTC)",
-      role: "Software Engineer Intern",
-      duration: "July 2025 – Present",
-      location: "Pune, India",
-      description: [
-        "Developing and integrating backend **product features** for Windchill, a flagship Product Lifecycle Management (PLM) platform, using Java and Spring Boot. ",
-        "Applied critical thinking and systems design principles to architect a new search-indexing microservice, targeting a 30% query latency reduction for large-scale enterprise datasets. ",
-      ],
-      technologies: ["Java", "Spring Boot", "Microservices", "PLM"],
-    },
-    {
-      company: "Accenture",
-      role: "Associate Software Engineer Intern",
-      duration: "May 2025 – July 2025 ",
-      location: "Pune, India ",
-      description: [
-        "Engineered and deployed enterprise-grade Generative AI solutions, delivering key **product features** using RAG pipelines to improve data retrieval accuracy and reduce manual analysis time by 40%. ",
-      ],
-      technologies: ["Generative AI", "RAG Pipelines", "Data Retrieval", "Python"],
-    },
-    {
-      company: "ChicChic",
-      role: "Backend Engineer, R&D (Part-time)",
-      duration: "June 2025 – August 2025 ",
-      location: "Pune, India ",
-      description: [
-        "Built scalable backend systems using Node.js and Python to support new **product features**, optimizing API performance by 45% and supporting a 50% increase in user traffic.",
-      ],
-      technologies: ["Node.js", "Python", "API Development", "Scalability"],
-    },
-  ];
 
   const openModal = (project: Project) => {
     setModalData(project);
@@ -321,6 +184,7 @@ export default function Home() {
           </div>
         </div>
 
+          {/* {About me} */}
         <div
           id="about-me"
           className="about-me min-h-screen w-screen scroll-snap-section flex flex-col items-center justify-center text-left space-y-8 px-8 md:gap-y-28 bg-white text-black"
@@ -354,8 +218,8 @@ export default function Home() {
             </div>
           </div>
         </div>
-        
-        {/* NEW: Achievements Section */}
+
+        {/* Achievements Section */}
         <div id="achievements" className="min-h-screen w-screen scroll-snap-section flex flex-col items-center justify-center py-16 px-8 bg-white text-black">
             <h1 className="text-4xl md:text-6xl font-bold mb-12 appear text-center">
                 Achievements
@@ -463,16 +327,16 @@ export default function Home() {
           </div>
         </div>
 
-        {/* UPGRADED: Project Modal */}
+        {/*Project Modal */}
         {showModal && modalData && (
           <div className="fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 animate-fadeIn" onClick={closeModal}>
             <div className="bg-white text-black rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto relative p-8" onClick={(e) => e.stopPropagation()}>
                 <button onClick={closeModal} className="absolute top-4 right-4 text-3xl text-gray-500 hover:text-black transition-colors">
                     <IoCloseOutline />
                 </button>
-                
+
                 <h2 className="text-4xl font-bold mb-4">{modalData.title}</h2>
-                
+
                 <div className="mb-6">
                     <h3 className="text-xl font-semibold mb-2 text-gray-800">About the Project</h3>
                     <ul className="list-disc list-inside text-gray-700 space-y-2">
@@ -481,7 +345,7 @@ export default function Home() {
                         ))}
                     </ul>
                 </div>
-                
+
                 <div className="mb-6">
                     <h3 className="text-xl font-semibold mb-3 text-gray-800">Technologies Used</h3>
                     <div className="flex flex-wrap gap-2">
@@ -513,7 +377,7 @@ export default function Home() {
             </div>
         </div>
         )}
-        
+
         {/* Contact Section */}
         <div
           id="contacts"
